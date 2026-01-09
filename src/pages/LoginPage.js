@@ -25,7 +25,7 @@ const LoginPage = () => {
 
   return (
     <div className='login-container'>
-      <div className='login-card'></div>
+      <div className='login-card'>
       <h2>Page de Connexion</h2>
       <form onSubmit={handleLogin}>
        <input
@@ -43,6 +43,7 @@ const LoginPage = () => {
         />
       <button type="submit" className='login-button'>Se connecter</button>
       </form>
+    </div>
     </div>
   );
 };

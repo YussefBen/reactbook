@@ -1,9 +1,14 @@
 import "@testing-library/dom";
 import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import PostCard from "./PostCard";
 
 test("PostCard: le clic sur J'aime incrémente et Reset réinitialise le compteur", () => {
-  render(<PostCard author="Alice" content="Hello" initialLikes={0} />);
+  render(
+    <MemoryRouter>
+  <PostCard author="Alice" content="Hello" initialLikes={0} />
+    </MemoryRouter>
+  );
 
   // Vérifie que le compteur de likes initial est à 0
   expect(screen.getByText(/0/)).toBeInTheDocument();

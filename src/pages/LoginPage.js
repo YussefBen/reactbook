@@ -9,36 +9,40 @@ const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    email.preventDefault();
-    if (email.trim() !== '' && password.trim() !== '') {
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    const emailLogin ="yussef@react.com";
+    const passwordLogin ="react123";
+
+    if(email === emailLogin && password === passwordLogin){
       login({name: "Yussef", email: email});
       navigate('/');
     } else {
-      alert('Veuillez entrer des informations valides.');
+      alert("Email ou mot de passe incorrect");
     }
   };
 
   return (
-    <div style={{padding: '20px'}}>
+    <div className='login-container'>
+      <div className='login-card'></div>
       <h2>Page de Connexion</h2>
       <form onSubmit={handleLogin}>
-        <div style={{marginBottom: '10px'}}>
-        <input
+       <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)} required
         />
-        </div>
         <input
+        className='login-input'
           type="password"
           placeholder="Mot de passe"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)} required
         />
+      <button type="submit" className='login-button'>Se connecter</button>
       </form>
-      <button type="submit">Se connecter</button>
     </div>
   );
 };

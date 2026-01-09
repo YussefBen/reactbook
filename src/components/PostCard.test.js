@@ -1,23 +1,22 @@
-import { fireEvent, render, screen } from '@testing-library/react';
-// On utilise MemoryRouter au lieu de BrowserRouter pour les tests
-import { MemoryRouter } from 'react-router-dom';
-import PostCard from './PostCard';
+import "@testing-library/dom";
+import { fireEvent, render, screen } from "@testing-library/react";
+import PostCard from "./PostCard";
 
-test('Vérification de la carte et des commentaires', () => {
-  render(
-    <MemoryRouter>
-      <PostCard author="Yussef" content="Mon premier post" />
-    </MemoryRouter>
-  );
+test("PostCard: le clic sur J'aime incrémente et Reset réinitialise le compteur", () => {
+  render(<PostCard author="Alice" content="Hello" initialLikes={0} />);
 
-  expect(screen.getByText(/Yussef/i)).toBeInTheDocument();
-
+  // Vérifie que le compteur de likes initial est à 0
+  expect(screen.getByText(/0/)).toBeInTheDocument();
   
-  const input = screen.getByPlaceholderText(/Ajouter un commentaire/i);
-  const bouton = screen.getByText(/Poster/i);
+  // Simule un clic sur le bouton J'aime
+  fireEvent.click(screen.getByRole("button", { name: /j'aime/i }));
+  
+  // Vérifie que le compteur de likes est maintenant à 1
+  expect(screen.getByText(/1/)).toBeInTheDocument();
 
-  fireEvent.change(input, { target: { value: 'Génial !' } });
-  fireEvent.click(bouton);
-
-  expect(screen.getByText('Génial !')).toBeInTheDocument();
+  // Simule un clic sur le bouton Reset
+  fireEvent.click(screen.getByRole("button", { name: /reinitialiser/i }));
+  
+  // Vérifie que le compteur de likes est réinitialisé à 0
+  expect(screen.getByText(/0/)).toBeInTheDocument();
 });

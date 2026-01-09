@@ -12,7 +12,7 @@ test("PostCard: le clic sur J'aime incrémente et Reset réinitialise le compteu
 
  expect(screen.getByText("2")).toBeInTheDocument();
 
- fireEvent.click(screen.getAllByRole("button", { name: /j'aime/i })[0]);
+ fireEvent.click(screen.getAllByRole("button", { name: /j'aime ♡/i })[0]);
 
  expect(screen.getByText("3")).toBeInTheDocument();
 

@@ -6,7 +6,7 @@ on:
   # Exécuter automatiquement le workflow à chaque push sur la branche main
   # ou à chaque Pull Request vers main
   push:
-    branches: ["main"]
+    branches: ["main", "feature/partie3"]
   pull_request:
     branches: ["main"]
 

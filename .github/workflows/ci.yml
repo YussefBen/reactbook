@@ -1,0 +1,53 @@
+# Nom du workflow tel qu'il apparaîtra dans l'onglet "Actions" de GitHub
+name: ReactBook CI
+
+# Déclencheurs : quand exécuter le workflow ?
+on:
+  # Exécuter automatiquement le workflow à chaque push sur la branche main
+  # ou à chaque Pull Request vers main
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+# Un workflow contient un ou plusieurs "jobs"
+# Chaque job s'exécute sur une machine virtuelle (runner) fournie par GitHub
+jobs:
+  # Nom du job : on enchaîne tests + build + docker build
+  test-build-docker:
+    # Choix du runner : Ubuntu Linux (standard, rapide, Docker disponible)
+    runs-on: ubuntu-latest
+
+    # Un job est constitué d'étapes (steps) exécutées dans l'ordre.
+    # Si une étape échoue, le job s'arrête et le workflow devient rouge (FAIL).
+    steps:
+      # 1) Récupérer le code du dépôt
+      # Sans cette étape, la machine virtuelle est vide (pas de package.json, pas de src/)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2) Installer Node.js (version 18 imposée pour la stabilité)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3) Installer les dépendances de manière reproductible
+      # npm ci est plus strict que npm install car il utilise le package-lock.json
+      - name: Install dependencies
+        run: npm ci
+
+      # 4) Lancer les tests Jest (étape bloquante)
+      # On utilise --watchAll=false pour que le test se termine après une seule exécution
+      - name: Run tests
+        run: npm test -- --watchAll=false
+
+      # 5) Construire l'application React (Build)
+      # Vérifie que le code compile sans erreurs d'import ou de syntaxe
+      - name: Build React app
+        run: npm run build
+
+      # 6) Construire l'image Docker
+      # Valide que le Dockerfile est correct et que l'image est prête au déploiement
+      - name: Docker build
+        run: docker build -t reactbook-frontend:ci .
